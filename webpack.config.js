@@ -6,6 +6,7 @@ module.exports = {
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "build"),
+    publicPath: "/",
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -14,22 +15,23 @@ module.exports = {
   ],
   devServer: {
     port: 8008,
-    host: 'dev.june.local',
+    host: "dev.june.local",
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      "Access-Control-Allow-Origin": "*",
     },
+    historyApiFallback: true,
     proxy: {
       "/api/**": {
         target: "https://editor.staging.juneapp.com/",
         changeOrigin: true,
-        logLevel: 'debug'
+        logLevel: "debug",
       },
       "/media/image/**": {
         target: "https://editor.staging.juneapp.com/",
         changeOrigin: true,
-        logLevel: 'debug'
-      }
-    }
+        logLevel: "debug",
+      },
+    },
   },
   module: {
     // exclude node_modules
@@ -43,12 +45,16 @@ module.exports = {
       // `ts` and `tsx` files are parsed using `ts-loader`
       {
         test: /\.(ts|tsx)$/,
-        loader: "ts-loader"
-      }
+        loader: "ts-loader",
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   // pass all js files through Babel
   resolve: {
     extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
-  }
+  },
 };
